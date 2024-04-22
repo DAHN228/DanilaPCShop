@@ -1,0 +1,12 @@
+h1 {
+    color: #2a5aa2;
+    text-align: center;
+}
+
+.hello {
+    display: block;
+    margin: 0 auto;
+    max-height: 500px;
+}
+
+

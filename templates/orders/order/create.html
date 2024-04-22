@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}
+    Оформление заказа
+{% endblock title %}
+{% block content %}
+    <h1 class="mb-4">Оформление заказа</h1>
+    <div class="row">
+        <div class="col-6 m-auto">
+            <form action="." method="post" class="">
+                {% csrf_token %}
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th class="fw-light">Имя</th>
+                            <td class="text-end">{{ user.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="fw-light">Фамилия</th>
+                            <td class="text-end">{{ user.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="fw-light">Почта</th>
+                            <td class="text-end">{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th class="fw-light">Город</th>
+                            <td class="text-end">{{ form.city }}</td>
+                        </tr>
+                        <tr>
+                            <th class="fw-light">Адрес</th>
+                            <td class="text-end">{{ form.address }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-success w-100 mt-4">
+                    Оформить
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

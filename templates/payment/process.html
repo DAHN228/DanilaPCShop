@@ -1,0 +1,36 @@
+{% extends "main.html" %}
+{% load static %}
+{% block title %}Pay your order{% endblock %}
+{% block content %}
+    <h1>Оплата</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Товар</th>
+                    <th scope="col">Цена</th>
+                    <th scope="col">Кол-во</th>
+                    <th scope="col">Итого</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items.all %}
+                    <tr class="{% cycle 'table-light' 'table-info' %}">
+                        <td>{{ item.product.name }}</td>
+                        <td class="num">${{ item.price }}</td>
+                        <td class="num">{{ item.quantity }}</td>
+                        <td class="num">${{ item.get_cost }}</td>
+                    </tr>
+                {% endfor %}
+                <tr class="table-primary">
+                    <td colspan="3">К оплате:</td>
+                    <td class="num">${{ order.get_total_cost }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <form action="{% url 'payment:process' %}" method="post">
+        <button type="submit" class="btn btn-success">Оплатить</button>
+        {% csrf_token %}
+    </form>
+{% endblock %}

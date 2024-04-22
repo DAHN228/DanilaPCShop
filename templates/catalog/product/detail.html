@@ -1,0 +1,94 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    {{ product.name }}
+{% endblock title %}
+<head>
+    <meta name="keywords" content="компьютер, видеокарта, диск, клавиатура, мышь, виндус">
+</head>
+{% block content %}
+    <div class="row mb-5">
+        <div class="col-md-4 position-relative m-auto mb-4">
+            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/logo.png' %}{% endif %}" class="img-thumbnail img-rounded mb-3">
+
+            {% if user.is_authenticated %}
+                <form action="{% url 'cart_add' product.id %}" method="post" class="d-flex justify-content-between">
+                    <div class="w-100 me-3">
+                        {{ cart_product_form }}
+                        {% csrf_token %}
+                    </div>
+                    <input type="submit" value="Купить" class="btn btn-success w-100">
+                </form>
+            {% else %}
+                <button type="button" class="btn w-100 btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Купить
+                </button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header border-0">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body px-2 py-3 text-center">
+                                Для покупки {{ product.name }} необходимо авторизоваться
+                            </div>
+                            <div class="modal-footer border-0 d-flex justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отмена</button>
+                                <a href="{% url 'login' %}">
+                                    <button type="button" class="btn btn-danger">Войти</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h3 class="mb-5">{{ product.name }}</h3>
+            <div class="d-flex justify-content-between mb-2">
+                <div class="me-3">Цена</div>
+                <div class="text-truncate fw-semibold">
+                    {{ product.price }} руб
+                </div>
+            </div>
+            <!-- Добавьте остальные блоки информации о товаре здесь -->
+            <div class="d-flex justify-content-between mb-2">
+                <div class="me-3">Тип комплектующего</div>
+                <div class="text-truncate">
+                    {{ product.type }}
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <div class="me-3">Производитель</div>
+                <div class="text-truncate">
+                    {{ product.brand }}
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <div class="me-3">Тип подсветки</div>
+                <div class="text-truncate">
+                    {{ product.backlight }}
+                </div>
+            </div>
+            <div class="">
+                <div class="me-3">Описание</div>
+                <div class="text-truncate">
+                    {{ product.description }}
+                </div>
+            </div>
+            <!-- Отображение отзывов внизу -->
+            <h4 class="mt-4 mb-3">Отзывы</h4>
+            {% if product.reviews.count > 0 %}
+                {% for review in product.reviews.all %}
+                    <div class="mb-2">
+                        <strong>{{ review.get_review_author }}</strong>: {{ review.text }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>На этот товар еще никто не оставил отзыв.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}
